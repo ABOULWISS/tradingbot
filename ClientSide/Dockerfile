@@ -12,5 +12,7 @@ COPY . .
 
 RUN npm run build
 
-# 👇 use preview (serves built app correctly)
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
+# 🔥 الحل الصحيح
+RUN npm install -g serve
+
+CMD ["serve", "-s", "dist", "-l", "3000"]
