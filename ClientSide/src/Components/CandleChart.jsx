@@ -115,8 +115,7 @@ export default function CandleChart({ onReady   ,  timeframe, onTimeframeChange}
   useEffect(() => {
     if (!seriesRef.current || !chartRef.current) return;
 
-    //fetch(`${API_URL}/getallpertf?tf=${timeframe}`)
-    fetch(`http://localhost:8000/getallpertf?tf=${timeframe}`)
+    fetch(`https://serverside-98cu.onrender.com/getallpertf?tf=${timeframe}`)
       .then(res => res.json())
       .then(raw => {
         const data = raw
@@ -159,8 +158,9 @@ export default function CandleChart({ onReady   ,  timeframe, onTimeframeChange}
   // ======================
   useEffect(() => {
     
-    const ws = new WebSocket(`ws://backend:8000/ws/price?tf=${timeframe}`);
-
+   
+    const ws = new WebSocket(`wss://serverside-98cu.onrender.com/ws/price?tf=${timeframe}`);
+    
     ws.onopen = () => console.log("WS Connected");
 
     ws.onerror = (err) => console.log("WS Error", err);
