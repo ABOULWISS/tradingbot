@@ -31,7 +31,7 @@ export default function MarketStructure({
         const interval = setInterval(() => {
             if (!candlesMapRef.current?.size) return;
 
-            fetch(`http://localhost:8000/market-structure/allPertimeframe?timeframe=${timeframe}`)
+            fetch(`https://serverside-98cu.onrender.com/market-structure/allPertimeframe?timeframe=${timeframe}`)
                 .then(res => res.json())
                 .then(structures => {
 
