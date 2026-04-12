@@ -1,5 +1,5 @@
 
-from DataLair.DatabaseManager.database import Base
+from ServerSide.DataLair.DatabaseManager.database import Base
 from sqlalchemy import Column, Integer, Float, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql import func
 

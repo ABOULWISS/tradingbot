@@ -59,12 +59,25 @@ async def auto_store_market_structure():
 
 
 
+@router.get("/allchoch")
+def get_all_choch():
+    service = MarketStructureService()
+    return service.get_all_choch()
+
+
+
+@router.get("/allbos")
+def get_all_bos():
+    service = MarketStructureService()
+    return service.get_all_bos()
+
+
+
+
 @asynccontextmanager
 async def lifespan(app):
     asyncio.create_task(auto_store_market_structure())
     yield
-
-
 
 
 

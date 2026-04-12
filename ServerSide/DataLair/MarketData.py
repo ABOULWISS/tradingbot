@@ -4,9 +4,10 @@ from DataLair.models.MarketDataModel import MarketData
 from DataLair.DatabaseManager.database import SessionLocal
 from DataLair.models.Symbol import Symbol
 import pandas as pd
+from DataLair.models.MarketStructure import MarketStructure 
+
+import time 
 from datetime import datetime, timezone
-
-
 
 
 
@@ -183,6 +184,66 @@ class MarketDataCollector:
 
         finally:
             session.close()
+
+
+
+
+    def delete_old_all(self):
+        session: Session = SessionLocal()
+
+
+
+        try:
+            THREE_DAYS = 3 * 24 * 60 * 60
+            now = int(time.time())
+            co = now - THREE_DAYS
+
+            cutoff = self.ms_to_datetime(co)
+
+            # 🔥 Step 1: get old MarketData IDs
+            old_ids = (
+                session.query(MarketData.MarketDataID)
+                .filter(MarketData.Timestamp < cutoff)
+                .all()
+            )
+
+
+
+            # flatten [(1,), (2,), ...] → [1, 2, ...]
+            old_ids = [id[0] for id in old_ids]
+
+
+
+            if old_ids:
+                # 🔥 Step 2: delete MarketStructure FIRST
+                session.query(MarketStructure).filter(
+                    MarketStructure.MarketDataID.in_(old_ids)
+                ).delete(synchronize_session=False)
+
+
+
+                # 🔥 Step 3: delete MarketData
+                session.query(MarketData).filter(
+                    MarketData.MarketDataID.in_(old_ids)
+                ).delete(synchronize_session=False)
+
+
+
+            session.commit()
+
+
+
+        except Exception as e:
+            session.rollback()
+            raise e
+
+
+
+        finally:
+            session.close()
+
+
+
 
 
 

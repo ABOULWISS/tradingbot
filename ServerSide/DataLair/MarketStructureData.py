@@ -71,22 +71,14 @@ class MarketStructureCollector:
 
     def store_market_structure(self, df: pd.DataFrame):
 
-
-
         # 🔒 Safety: do nothing if no data
         if df.empty:
             return
 
-
-
         session: Session = SessionLocal()
-
-
 
         try:
             records = []
-
-
 
             # 🔁 Prepare bulk records
             for _, row in df.iterrows():
@@ -99,8 +91,6 @@ class MarketStructureCollector:
                     "TimeFrame": row["timeframe"],
                     "Timestamp": self.ms_to_datetime(row["timestamp"]),
                 })
-
-
 
             # 🚀 Bulk insert
             stmt = insert(MarketStructure).values(records)
@@ -166,9 +156,68 @@ class MarketStructureCollector:
 
 
 
+
+    def get_all_choch(self):
+        session: Session = SessionLocal()
+
+        try:
+            structures = (
+                session.query(MarketStructure)
+                .filter(MarketStructure.CHOCH == True)   
+                .order_by(MarketStructure.CreatedAt.asc())
+                .all()
+            )
+
+            result = []
+            for s in structures:
+                result.append({
+                    "id": s.MarketStructureID,
+                    "market_data_id": s.MarketDataID,
+                    "type": s.Type.value,
+                    "direction": s.Direction.value if s.Direction else None,
+                    "bos": s.BOS,
+                    "choch": s.CHOCH,
+                    "created_at": int(s.CreatedAt.timestamp()),
+                })
+
+            return result
+
+
+
+        finally:
+            session.close()
     
 
+    def get_all_bos(self):
+        session: Session = SessionLocal()
 
+        try:
+            structures = (
+                session.query(MarketStructure)
+                .filter(MarketStructure.BOS == True)   
+                .order_by(MarketStructure.CreatedAt.asc())
+                .all()
+            )
+
+            result = []
+            for s in structures:
+                result.append({
+                    "id": s.MarketStructureID,
+                    "market_data_id": s.MarketDataID,
+                    "type": s.Type.value,
+                    "direction": s.Direction.value if s.Direction else None,
+                    "bos": s.BOS,
+                    "choch": s.CHOCH,
+                    "created_at": int(s.CreatedAt.timestamp()),
+                })
+
+            return result
+
+
+
+        finally:
+            session.close()
+  
 
     def get_all_market_structure_and_market_data(self):
 

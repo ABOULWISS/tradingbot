@@ -56,10 +56,13 @@ class MarketDataEngine:
         return df.to_dict(orient="records")
 
 
-
+   
+        
+        
 
 
     def get_all_candles_per_timeframe(self, timeframe : str):
+       # self.collector.delete_old_all()
         df = self.collector.get_all_market_data_df()
 
         # Defensive checks
@@ -180,6 +183,8 @@ class MarketDataEngine:
         candle["low"] = min(candle["low"], price)
         candle["close"] = price
     
+
+
 
 
     def process_tick(self, price, ts):

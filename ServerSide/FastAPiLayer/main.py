@@ -8,6 +8,7 @@ from DataLair.DatabaseManager.database import engine, Base
 from DataLair.models.MarketDataModel import MarketData  
 
 
+
 from FastAPiLayer.MarketData import (
     router as market_data_router,
     lifespan as marketdata_lifespan,
