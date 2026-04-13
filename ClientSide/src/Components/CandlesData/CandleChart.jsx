@@ -155,7 +155,7 @@ export default function CandleChart({ onReady   ,  timeframe, onTimeframeChange}
   useEffect(() => {
     if (!seriesRef.current) return;
 
-    const ws = new WebSocket(`wss://serverside-98cu.onrender.com/ws/price`);
+    const ws = new WebSocket(`${import.meta.env.VITE_WS_URL}/ws/price?tf=${timeframe}`);
 
     ws.onopen = () => {
       console.log("✅ WS connected");
@@ -243,31 +243,7 @@ export default function CandleChart({ onReady   ,  timeframe, onTimeframeChange}
         </select>
       </div>
 
-             {/*  
-      <div style={{ marginBottom: "12px" }}>
-        <select
-          value={timeframe}
-          //onChange={e => setTimeframe(e.target.value)}
-            onChange={e => onTimeframeChange(e.target.value)}
-
-
-          style={{
-            padding: "8px 12px",
-            background: "#020617",
-            color: "#cbd5e1",
-            border: "1px solid #334155",
-            borderRadius: "6px",
-            fontSize: "40px",
-          }}
-        >  
-          {TIMEFRAMES.map(tf => (
-            <option key={tf.value} value={tf.value}>
-              {tf.label}
-            </option>
-          ))}
-        </select>
-      </div>
-        */}
+  
       
       <div
         ref={containerRef}
